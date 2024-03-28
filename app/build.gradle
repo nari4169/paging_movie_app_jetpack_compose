@@ -1,9 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -23,12 +23,12 @@ android {
     }
 
     namespace 'com.mmj.movieapp'
-    compileSdk project.compileSdkVersion
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.mmj.movieapp"
-        minSdk project.minSdkVersion
-        targetSdk project.targetSdkVersion
+        minSdk 29
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -63,11 +63,22 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion project.kotlinCompilerExtensionVersion
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    kotlin {
+        sourceSets {
+            debug {
+                kotlin.srcDir("build/generated/ksp/debug/kotlin")
+            }
+            release {
+                kotlin.srcDir("build/generated/ksp/release/kotlin")
+            }
         }
     }
 }
@@ -75,14 +86,14 @@ android {
 dependencies {
 
     // Kotlin
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation "androidx.core:core-ktx:1.12.0"
 
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
 
     // AndroidX Compose
-    implementation platform("androidx.compose:compose-bom:$androidXComposeVersion")
-    androidTestImplementation platform("androidx.compose:compose-bom:$androidXComposeVersion")
+    implementation platform("androidx.compose:compose-bom:2024.03.00")
+    androidTestImplementation platform("androidx.compose:compose-bom:2024.03.00")
 
     // Compose Ui
     implementation 'androidx.compose.ui:ui'
@@ -90,7 +101,7 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling-preview'
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
-    implementation "androidx.activity:activity-compose:$composeActivityVersion"
+    implementation "androidx.activity:activity-compose:1.8.2"
 
     // Manifest
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
@@ -99,51 +110,51 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
 
     // Test
-    testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation "androidx.test.ext:junit:$testExtJunitVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:4.13.2"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
 
     //Navigation
-    implementation "com.google.accompanist:accompanist-navigation-animation:$navAnimationVersion"
-    implementation "androidx.navigation:navigation-compose:$navigationVersion"
-    implementation "androidx.navigation:navigation-runtime-ktx:$navigationVersion"
+    implementation "com.google.accompanist:accompanist-navigation-animation:0.31.3-beta"
+    implementation "androidx.navigation:navigation-compose:2.7.7"
+    implementation "androidx.navigation:navigation-runtime-ktx:2.7.7"
 
     // System UI Controller
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$systemUIControllerVersion"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 
     //Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    kapt "androidx.hilt:hilt-compiler:1.0.0"
-    implementation "androidx.hilt:hilt-navigation-compose:$hiltAndroidXVersion"
+    implementation "com.google.dagger:hilt-android:2.51"
+    ksp "com.google.dagger:hilt-android-compiler:2.51"
+    ksp "androidx.hilt:hilt-compiler:1.2.0"
+    implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
 
     // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
     // OkHttp
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
 
     // Moshi
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    implementation "com.squareup.moshi:moshi:1.15.0"
+    ksp ("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     // Kotlin Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
 
     // Paper
-    implementation "io.github.pilgr:paperdb:$paperVersion"
+    implementation "io.github.pilgr:paperdb:2.7.2"
 
     // Lottie
-    implementation "com.airbnb.android:lottie-compose:$lottieVersion"
+    implementation "com.airbnb.android:lottie-compose:6.0.0"
 
     //paging compose
-    implementation "androidx.paging:paging-runtime:$pagingVersion"
-    testImplementation "androidx.paging:paging-common:$pagingVersion"
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha20'
+    implementation "androidx.paging:paging-runtime-ktx:3.2.1"
+    testImplementation "androidx.paging:paging-common-ktx:3.2.1"
+    implementation 'androidx.paging:paging-compose:3.2.1'
 
-    implementation "io.coil-kt:coil-compose:2.4.0"
+    implementation "io.coil-kt:coil-compose:2.6.0"
 }
